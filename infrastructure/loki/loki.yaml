@@ -81,7 +81,7 @@ frontend:
 query_scheduler:
   max_outstanding_requests_per_tenant: 256
 
-# Ingester configuration  
+# Ingester configuration
 ingester:
   wal:
     enabled: true

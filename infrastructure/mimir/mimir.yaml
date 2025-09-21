@@ -12,7 +12,7 @@ common:
   storage:
     backend: filesystem
     filesystem:
-      dir: /data/mimir
+      dir: /data/mimir/blocks
 
 # Ingester configuration
 ingester:
@@ -28,7 +28,7 @@ distributor:
 ruler:
   ring:
     instance_addr: 0.0.0.0
-  rule_path: /data/rules
+  rule_path: /data/mimir/rules
   alertmanager_url: http://localhost:8080/alertmanager
 
 # Alertmanager configuration
@@ -58,7 +58,7 @@ limits:
 
 # Runtime config (optional)
 runtime_config:
-  file: ""
+  file: ''
 
 # Multitenancy configuration (disabled for single tenant)
 multitenancy_enabled: false

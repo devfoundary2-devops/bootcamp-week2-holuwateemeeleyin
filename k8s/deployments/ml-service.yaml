@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml-service
+  namespace: shopmicro
+  labels:
+    app: ml-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml-service
+  template:
+    metadata:
+      labels:
+        app: ml-service
+    spec:
+      containers:
+      - name: ml-service
+        image: shopmicro-ml-service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3002
+        env:
+        - name: FLASK_ENV
+          value: "production"
+        - name: PORT
+          value: "3002"
+        - name: WORKERS
+          value: "2"
+        - name: THREADS
+          value: "4"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ml-service
+  namespace: shopmicro
+  labels:
+    app: ml-service
+spec:
+  selector:
+    app: ml-service
+  ports:
+  - port: 3002
+    targetPort: 3002
+  type: ClusterIP

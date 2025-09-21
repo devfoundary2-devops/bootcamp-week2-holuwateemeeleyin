@@ -1,5 +1,11 @@
 // Initialize OpenTelemetry tracing first
-require('./telemetry');
+try {
+  require('./telemetry');
+  console.log('OpenTelemetry initialized successfully');
+} catch (error) {
+  console.warn('Failed to initialize OpenTelemetry:', error.message);
+  console.warn('Continuing without telemetry...');
+}
 
 const express = require('express');
 const cors = require('cors');

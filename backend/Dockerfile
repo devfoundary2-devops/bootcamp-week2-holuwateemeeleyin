@@ -2,7 +2,8 @@
 FROM node:20-alpine3.22 AS base
 
 # Install security updates and common tools
-RUN apk update && apk upgrade && \
+RUN apk update --no-cache || (sleep 5 && apk update --no-cache) && \
+    apk upgrade --no-cache && \
     apk add --no-cache dumb-init curl && \
     rm -rf /var/cache/apk/*
 
@@ -25,7 +26,7 @@ CMD ["npm", "run", "dev"]
 FROM base AS builder
 USER nodejs
 COPY --chown=nodejs:nodejs package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm ci && npm cache clean --force
 
 # Production stage
 FROM base AS production
@@ -38,6 +39,7 @@ COPY --from=builder --chown=nodejs:nodejs /usr/src/app/node_modules ./node_modul
 # Copy application code
 COPY --chown=nodejs:nodejs package*.json ./
 COPY --chown=nodejs:nodejs server.js ./
+COPY --chown=nodejs:nodejs telemetry.js ./
 COPY --chown=nodejs:nodejs routes/ ./routes/
 COPY --chown=nodejs:nodejs middleware/ ./middleware/
 
