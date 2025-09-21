@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mimir
+  namespace: shopmicro
+spec:
+  selector:
+    app: mimir
+  ports:
+    - port: 9009
+      targetPort: 9009
+  type: ClusterIP
